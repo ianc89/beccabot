@@ -2,8 +2,8 @@ import discord
 import dotenv
 import os
 from discord.ext import commands
-from options import options
-from card import card
+
+
 
 # Change only the no_category default string
 help_command = commands.DefaultHelpCommand(
@@ -31,6 +31,7 @@ option_name = "all_options.csv"
 # Command functions
 @client.command(help="Add new potential tasks")
 async def add(ctx, for_tank, for_dps, for_support, *task):
+	from options import options
 	# Require for_XXX to be 0 or 1
 	if for_tank != "0" and for_tank != "1":
 		await ctx.send("Provide 0 or 1 to indicate if this is for a tank or not")
@@ -40,11 +41,12 @@ async def add(ctx, for_tank, for_dps, for_support, *task):
 		await ctx.send("Provide 0 or 1 to indicate if this is for a tank or not")
 	task = " ".join(task)
 	o = options(option_name)
-	o.add_entry(bool(for_tank), bool(for_dps), bool(for_support), task)
+	o.add_entry(bool(int(for_tank)), bool(int(for_dps)), bool(int(for_support)), task)
 	await ctx.send("Task added to list")
 
 @client.command(help="List all available tasks")
 async def list(ctx):
+	from options import options
 	# Print out the dataframe data
 	o = options(option_name)
 	# Get output as batches of strings
@@ -55,6 +57,7 @@ async def list(ctx):
 
 @client.command(help="Generate a new random card")
 async def generate(ctx, name, for_tank, for_dps, for_support):
+	from card import card
 	# Require for_XXX to be 0 or 1
 	if for_tank != "0" and for_tank != "1":
 		await ctx.send("Provide 0 or 1 to indicate if this is for a tank or not")
@@ -63,21 +66,24 @@ async def generate(ctx, name, for_tank, for_dps, for_support):
 	if for_support != "0" and for_support != "1":
 		await ctx.send("Provide 0 or 1 to indicate if this is for a tank or not")
 	c = card(name)
-	c.generate_random_card(bool(for_tank),bool(for_dps),bool(for_support))
+	c.generate_random_card(bool(int(for_tank)),bool(int(for_dps)),bool(int(for_support)))
 	await ctx.send(f"Generated card : {name}")
 
 @client.command(help="Print out existing card state")
 async def card(ctx, name):
+	from card import card
 	c = card(name)
 	await ctx.send("```"+c.print_card()+"```")
 
 @client.command(help="Print out existing card tasks")
 async def print(ctx, name):
+	from card import card
 	c = card(name)
 	await ctx.send("```"+c.print_tasks()+"```")
 
 @client.command(help="Mark a task as completed")
 async def complete(ctx, name, idx):
+	from card import card
 	c = card(name)
 	e = c.complete_entry(idx)
 	if e:
