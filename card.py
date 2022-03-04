@@ -30,9 +30,20 @@ class card(object):
 		return entries
 
 	def complete_entry(self, box):
-		df = pandas.read_csv(self.csvpath)
+		try:
+			box = int(box)
+		except Exception as e:
+			print (e)
+			return False
+		try:
+			df = pandas.read_csv(self.csvpath)
+		except Exception as e:
+			print (e)
+			return False
+
 		df['complete'][box] = True
-		df.to_csv(self.csvpath)
+		df.to_csv(self.csvpath, index=False)
+		return True
 
 	def generate_random_card(self, inc_tank, inc_dps, inc_support):
 		# Function to generate a random card
