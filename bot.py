@@ -30,7 +30,7 @@ option_name = "all_options.csv"
 
 # Command functions
 @client.command(help="Add new potential tasks")
-async def add_task(ctx, for_tank, for_dps, for_support, *task):
+async def add(ctx, for_tank, for_dps, for_support, *task):
 	# Require for_XXX to be 0 or 1
 	if for_tank != "0" and for_tank != "1":
 		await ctx.send("Provide 0 or 1 to indicate if this is for a tank or not")
@@ -44,13 +44,17 @@ async def add_task(ctx, for_tank, for_dps, for_support, *task):
 	await ctx.send("Task added to list")
 
 @client.command(help="List all available tasks")
-async def list_tasks(ctx):
-	# Print out the dataframe directly
+async def list(ctx):
+	# Print out the dataframe data
 	o = options(option_name)
-	await ctx.send("```"+o.print_all()+"```")
+	# Get output as batches of strings
+	out_str = o.print_all()
+	# Loop through the batches
+	for s in out_str:
+		await ctx.send("```"+s+"```")
 
 @client.command(help="Generate a new random card")
-async def generate_card(ctx, name, for_tank, for_dps, for_support):
+async def generate(ctx, name, for_tank, for_dps, for_support):
 	# Require for_XXX to be 0 or 1
 	if for_tank != "0" and for_tank != "1":
 		await ctx.send("Provide 0 or 1 to indicate if this is for a tank or not")
@@ -63,17 +67,17 @@ async def generate_card(ctx, name, for_tank, for_dps, for_support):
 	await ctx.send(f"Generated card : {name}")
 
 @client.command(help="Print out existing card state")
-async def print_card(ctx, name):
+async def card(ctx, name):
 	c = card(name)
 	await ctx.send("```"+c.print_card()+"```")
 
 @client.command(help="Print out existing card tasks")
-async def print_tasks(ctx, name):
+async def print(ctx, name):
 	c = card(name)
 	await ctx.send("```"+c.print_tasks()+"```")
 
 @client.command(help="Mark a task as completed")
-async def complete_task(ctx, name, idx):
+async def complete(ctx, name, idx):
 	c = card(name)
 	e = c.complete_entry(idx)
 	if e:

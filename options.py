@@ -21,5 +21,10 @@ class options(object):
 		return pandas.read_csv(self.csvpath)
 	
 	def print_all(self):
+		# Print string, but split into batches of 50 entries
+		# Due to limit on discord output character length
 		df = self.get_dataframe()
-		return df.to_string()
+		all_str = []
+		for i in range(0, len(df), 50):
+			all_str.append(df[i:i+50].to_string())
+		return all_str
