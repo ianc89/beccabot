@@ -85,9 +85,11 @@ async def print(ctx, name):
 async def complete(ctx, name, idx):
 	from card import card
 	c = card(name)
-	e = c.complete_entry(idx)
+	e,completed = c.complete_entry(idx)
 	if e:
 		await ctx.send(f"Marked task [{idx}] as complete")
+		for co in completed:
+			await ctx.send(f"COMPLETED {co}")
 	else:
 		await ctx.send(f"Error with options {name} and {idx}")
 

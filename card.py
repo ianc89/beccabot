@@ -34,16 +34,26 @@ class card(object):
 			box = int(box)
 		except Exception as e:
 			print (e)
-			return False
+			return (False,[])
 		try:
 			df = pandas.read_csv(self.csvpath)
 		except Exception as e:
 			print (e)
-			return False
+			return (False,[])
 
+		# Check status before updating
+		completed_prior = self.check()
+		# Update dataframe
 		df['complete'][box] = True
 		df.to_csv(self.csvpath, index=False)
-		return True
+		# Check status after updating
+		completed_after = self.check()
+		# Identify any new completions
+		completed_new = list(set(completed_after) - set(completed_prior))
+		# Note if BINGO
+		if len(completed_after) == 10:
+			completed_new.append("-!-BINGO-!-")
+		return (True,completed_new)
 
 	def generate_random_card(self, inc_tank, inc_dps, inc_support):
 		# Function to generate a random card
@@ -81,6 +91,37 @@ class card(object):
 			info_str += str(e[0]).ljust(3)+": "+e[2]+"\n"
 		print (info_str)
 		return info_str
+
+	def check(self):
+		# Possible rows/cols
+		possible = {"Row 1":[0,1,2,3,4],
+					"Row 2":[5,6,7,8,9],
+					"Row 3":[10,11,12,13,14],
+					"Row 4":[15,16,17,18,19],
+					"Row 5":[20,21,22,23,24],
+					"Col 1":[0,5,10,15,20],
+					"Col 2":[1,6,11,16,21],
+					"Col 3":[2,7,12,17,22],
+					"Col 4":[3,8,13,18,23],
+					"Col 5":[4,9,14,19,24],
+					}
+		# What is completed
+		completed = []
+		# Read results
+		df = pandas.read_csv(self.csvpath)
+		# Loop though allowed completions
+		for p in possible:
+			complete = True
+			for box in possible[p]:
+				if df['complete'][box] == True:
+					complete &= True
+				else:
+					complete &= False
+			# Record the key if we are all true
+			if complete:
+				completed.append(p)
+		return completed
+					
 
 
 
