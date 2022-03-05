@@ -25,6 +25,6 @@ class options(object):
 		# Due to limit on discord output character length
 		df = self.get_dataframe()
 		all_str = []
-		for i in range(0, len(df), 50):
-			all_str.append(df[i:i+50].to_string())
+		for i in range(0, len(df), 20):
+			all_str.append(df[i:i+20].to_string())
 		return all_str
