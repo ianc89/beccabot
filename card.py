@@ -44,7 +44,7 @@ class card(object):
 		# Check status before updating
 		completed_prior = self.check()
 		# Update dataframe
-		if compelete:
+		if complete:
 			df['complete'][box] = True
 		else:
 			df['complete'][box] = False
