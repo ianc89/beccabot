@@ -61,9 +61,8 @@ class card(object):
 		# Get the options
 		opts    = options("all_options.csv")
 		df_opt  = opts.get_dataframe()
-		# Messy selection to ensure we only consider options
-		# which are true in argument and true in table
-		# Then drop those which are all False
+		# Messy selection to ensure we only consider options which are true in argument and true in table
+		# Then drop those options which are all False
 		df_opt  = df_opt.drop(df_opt[False == ((df_opt.tank & inc_tank) | (df_opt.dps & inc_dps) | (df_opt.support & inc_support))].index)
 		print ("Available :",len(df_opt),"options")
 		# Get 25
@@ -107,6 +106,8 @@ class card(object):
 					"Col 3":[2,7,12,17,22],
 					"Col 4":[3,8,13,18,23],
 					"Col 5":[4,9,14,19,24],
+					"Dia 1":[0,6,12,18,24],
+					"Dia 2":[4,8,12,16,20],
 					}
 		# What is completed
 		completed = []
