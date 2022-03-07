@@ -15,6 +15,21 @@ class options(object):
 			self.add_entry("tank","dps","support","entry")
 
 	def add_entry(self, is_tank, is_dps, is_support, entry):
+		# Add prefixes (user does not need to do this)
+		if is_tank and not is_dps and not is_support:
+			entry = "Tank: "+entry
+		if is_tank and is_dps and not is_support:
+			entry = "Tank/DPS: "+entry
+		if is_tank and not is_dps and is_support:
+			entry = "Tank/Supp: "+entry
+		if not is_tank and is_dps and not is_support:
+			entry = "DPS: "+entry
+		if not is_tank and is_dps and is_support:
+			entry = "DPS/Supp: "+entry
+		if not is_tank and not is_dps and is_support:
+			entry = "Supp: "+entry
+		if is_tank and is_dps and is_support:
+			entry = "Any: "+entry
 		self.dbcsv.write([is_tank, is_dps, is_support, entry])
 
 	def get_dataframe(self):
