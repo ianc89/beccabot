@@ -114,8 +114,8 @@ async def sucks(ctx, *x):
 
 @client.event
 async def on_command_error(ctx, error):
-    if isinstance(error, commands.CommandNotFound):
-        await ctx.send(f"**What a strange command to use, {ctx.message.author.display_name}...**")
+	if isinstance(error, commands.CommandNotFound):
+		await ctx.send(f"**What a strange command to use, {ctx.message.author.display_name}...**")
 	if isinstance(error, commands.MissingRequiredArgument):
 		await ctx.send('**Please pass in all requirements.**')
 	if isinstance(error, commands.MissingPermissions):
