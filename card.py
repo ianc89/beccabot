@@ -29,7 +29,7 @@ class card(object):
 			entries.append((i, df['complete'][i], df['entry'][i]))
 		return entries
 
-	def complete_entry(self, box):
+	def complete_entry(self, box, complete=True):
 		try:
 			box = int(box)
 		except Exception as e:
@@ -44,7 +44,10 @@ class card(object):
 		# Check status before updating
 		completed_prior = self.check()
 		# Update dataframe
-		df['complete'][box] = True
+		if compelete:
+			df['complete'][box] = True
+		else:
+			df['complete'][box] = False
 		df.to_csv(self.csvpath, index=False)
 		# Check status after updating
 		completed_after = self.check()

@@ -23,11 +23,6 @@ dotenv.load_dotenv()
 # Main option name
 option_name = "all_options.csv"
 
-
-
-# Objects
-
-
 # Command functions
 @client.command(help="Add new potential tasks")
 async def add(ctx, for_tank, for_dps, for_support, *task):
@@ -85,13 +80,42 @@ async def print(ctx, name):
 async def complete(ctx, name, idx):
 	from card import card
 	c = card(name)
-	e,completed = c.complete_entry(idx)
+	e,completed = c.complete_entry(idx, True)
 	if e:
 		await ctx.send(f"Marked task [{idx}] as complete")
 		for co in completed:
 			await ctx.send(f"COMPLETED {co}")
 	else:
 		await ctx.send(f"Error with options {name} and {idx}")
+
+@client.command(help="Mark a task as not completeted")
+async def incomplete(ctx, name, idx):
+	from card import card
+	c = card(name)
+	e,completed = c.complete_entry(idx, False)
+	if e:
+		await ctx.send(f"Marked task [{idx}] as incomplete")
+		for co in completed:
+			await ctx.send(f"COMPLETED {co}")
+	else:
+		await ctx.send(f"Error with options {name} and {idx}")
+
+@client.command(hidden=True)
+async def fuck(ctx, *x):
+	await ctx.send("Naughty naughty")
+
+@client.command(hidden=True)
+async def hummus(ctx, *x):
+	await ctx.send("That's wierd")
+
+@client.command(hidden=True)
+async def sucks(ctx, *x):
+	await ctx.send("Don't be rude")
+
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.CommandNotFound):
+        await ctx.send(f"What a strange command to use, {ctx.message.author.display_name}...")
 
 # Run client
 client.run(os.getenv('TOKEN'))
