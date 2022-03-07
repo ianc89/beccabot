@@ -115,7 +115,11 @@ async def sucks(ctx, *x):
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
-        await ctx.send(f"What a strange command to use, {ctx.message.author.display_name}...")
+        await ctx.send(f"**What a strange command to use, {ctx.message.author.display_name}...**")
+	if isinstance(error, commands.MissingRequiredArgument):
+		await ctx.send('**Please pass in all requirements.**')
+	if isinstance(error, commands.MissingPermissions):
+		await ctx.send("**You dont have all the requirements or permissions for using this command :angry:**")
 
 # Run client
 client.run(os.getenv('TOKEN'))
