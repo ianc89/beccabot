@@ -29,7 +29,7 @@ class card(object):
 			entries.append((i, df['complete'][i], df['entry'][i]))
 		return entries
 
-	def complete_entry(self, box, complete=True):
+	def complete_entry(self, box, complete):
 		try:
 			box = int(box)
 		except Exception as e:
