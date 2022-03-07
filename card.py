@@ -61,7 +61,10 @@ class card(object):
 		# Get the options
 		opts    = options("all_options.csv")
 		df_opt  = opts.get_dataframe()
-		df_opt  = df_opt.drop(df_opt[(df_opt.tank != inc_tank) & (df_opt.dps != inc_dps) & (df_opt.support != inc_support)].index)
+		# Messy selection to ensure we only consider options
+		# which are true in argument and true in table
+		# Then drop those which are all False
+		df_opt  = df_opt.drop(df_opt[False == ((df_opt.tank & inc_tank) | (df_opt.dps & inc_dps) | (df_opt.support & inc_support))].index)
 		print ("Available :",len(df_opt),"options")
 		# Get 25
 		results = df_opt.sample(25)
