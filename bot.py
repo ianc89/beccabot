@@ -74,7 +74,7 @@ async def card(ctx, name):
 async def print(ctx, name):
 	from card import card
 	c = card(name)
-	await ctx.send("```diff"+c.print_tasks()+"```")
+	await ctx.send("```diff\n"+c.print_tasks()+"```")
 
 @client.command(help="Mark a task as completed")
 async def complete(ctx, name, idx):
