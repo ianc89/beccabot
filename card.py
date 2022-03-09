@@ -93,7 +93,7 @@ class card(object):
 		# Info layout
 		info_str = ""
 		for e in entries:
-			info_str += str(e[0]).ljust(3)+": "+e[2]+"\n"
+			info_str += ("-" if e[1] else "+")+str(e[0]).ljust(3)+": "+e[2]+"\n"
 		print (info_str)
 		return info_str
 
