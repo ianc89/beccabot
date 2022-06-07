@@ -100,6 +100,36 @@ async def incomplete(ctx, name, idx):
 	else:
 		await ctx.send(f"Error with options {name} and {idx}")
 
+@client.command(help="Get a role")
+async def role(ctx):
+	import hero
+	r = hero.get_role()
+	await ctx.send(f"```{r}```")
+
+@client.command(help="Get a random hero")
+async def hero(ctx):
+	import hero
+	r = hero.get_any_hero()
+	await ctx.send(f"```{r}```")
+
+@client.command(help="Get a random support")
+async def support(ctx):
+	import hero
+	r = hero.get_any_support()
+	await ctx.send(f"```{r}```")
+
+@client.command(help="Get a random dps")
+async def dps(ctx):
+	import hero
+	r = hero.get_any_dps()
+	await ctx.send(f"```{r}```")
+
+@client.command(help="Get a random tank")
+async def tank(ctx):
+	import hero
+	r = hero.get_any_tank()
+	await ctx.send(f"```{r}```")
+
 @client.command(hidden=True)
 async def fuck(ctx, *x):
 	await ctx.send("Naughty naughty")
