@@ -13,7 +13,7 @@ def get_role():
 	return random.choice(roles)
 
 def get_any_hero():
-	heroes = get_tanks()+get_dps()+get_support()
+	heroes = get_tank()+get_dps()+get_support()
 	return random.choice(heroes)
 
 def get_any_support():
