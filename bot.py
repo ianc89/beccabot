@@ -1,6 +1,8 @@
 import discord
 import dotenv
 import os
+import functools
+import typing
 from discord.ext import commands
 
 
@@ -11,7 +13,14 @@ help_command = commands.DefaultHelpCommand(
 )
 
 # Our bot operator
+intents = discord.Intents.default()
+intents.members = True
+intents.typing = True
+intents.presences = True
+intents.message_content = True
+
 client = commands.Bot(
+	intents=intents,
     command_prefix='!', 
     description="Becca's Bingo/Overwatch Bot",
     help_command = help_command
@@ -22,6 +31,11 @@ dotenv.load_dotenv()
 
 # Main option name
 option_name = "all_options.csv"
+
+# Special function to async sync functions
+async def run_blocking(blocking_func: typing.Callable, *args, **kwargs) -> typing.Any:
+    func = functools.partial(blocking_func, *args, **kwargs)
+    return await client.loop.run_in_executor(None, func)
 
 # Command functions
 @client.command(help="Add new potential tasks")
@@ -141,6 +155,29 @@ async def hummus(ctx, *x):
 @client.command(hidden=True)
 async def sucks(ctx, *x):
 	await ctx.send("Don't be rude")
+
+@client.command(help="Ask GPT3 a question")
+async def question(ctx, *question):
+	from chat import davinci
+	# Configure chat feature
+	d = davinci()
+	d.configure()
+	async with ctx.channel.typing():
+		r,a = await run_blocking(d.prompt,question)
+	await ctx.send(a)
+
+@client.event
+async def on_message(message):
+	if message.author.bot == False and client.user.mentioned_in(message):
+		from chat import davinci
+		# Configure chat feature
+		d = davinci()
+		d.configure()
+		async with message.channel.typing():
+			r,a = await run_blocking(d.prompt, message.content.split())
+		await message.channel.send(a)
+	else:
+		await client.process_commands(message)
 
 @client.event
 async def on_command_error(ctx, error):
