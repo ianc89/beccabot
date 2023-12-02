@@ -2,11 +2,11 @@ import random
 
 # Global
 def get_tank():
-	return ["D.Va","Orisa","Reinhardt","Roadhog","Sigma","Winston","Wrecking Ball","Zarya","Junker Queen","Ramattra"]
+	return ["D.Va","Orisa","Reinhardt","Roadhog","Sigma","Winston","Wrecking Ball","Zarya","Junker Queen","Ramattra","Mauga","Doomfist"]
 def get_dps():
-	return ["Ashe","Bastion","Cassidy","Doomfist","Echo","Genji","Hanzo","Junkrat","Mei","Pharah","Reaper","Soldier","Sombra","Symmetra","Torbjörn","Tracer","Widowmaker","Soujorn"]
+	return ["Ashe","Bastion","Cassidy","Echo","Genji","Hanzo","Junkrat","Mei","Pharah","Reaper","Soldier","Sombra","Symmetra","Torbjörn","Tracer","Widowmaker","Soujorn"]
 def get_support():
-	return ["Ana","Baptiste","Brigitte","Lúcio","Mercy","Moira","Zenyatta","Kiriko"]
+	return ["Ana","Baptiste","Brigitte","Lúcio","Mercy","Moira","Zenyatta","Kiriko",'Illari','Lifeweaver']
 
 def get_role():
 	roles = ["Tank", "DPS", "Support", "Tank+DPS", "Tank+Support", "DPS+Support", "Flex"]

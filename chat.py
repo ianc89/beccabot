@@ -38,4 +38,3 @@ class davinci(bot):
 		print (response)
 		answer = response['choices'][0]['text']
 		return response, answer
-
