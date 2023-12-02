@@ -4,8 +4,10 @@ import os
 import functools
 import typing
 from discord.ext import commands
+from assistant import assistant
 
-
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 # Change only the no_category default string
 help_command = commands.DefaultHelpCommand(
@@ -34,8 +36,8 @@ option_name = "all_options.csv"
 
 # Special function to async sync functions
 async def run_blocking(blocking_func: typing.Callable, *args, **kwargs) -> typing.Any:
-    func = functools.partial(blocking_func, *args, **kwargs)
-    return await client.loop.run_in_executor(None, func)
+	func = functools.partial(blocking_func, *args, **kwargs)
+	return await client.loop.run_in_executor(None, func)
 
 # Command functions
 @client.command(help="Add new potential tasks")
@@ -156,25 +158,27 @@ async def hummus(ctx, *x):
 async def sucks(ctx, *x):
 	await ctx.send("Don't be rude")
 
-@client.command(help="Ask GPT3 a question")
+# New using assistant (assuming not to expensive...)
+@client.command(help="Ask AI bot a question")
 async def question(ctx, *question):
-	from chat import davinci
-	# Configure chat feature
-	d = davinci()
-	d.configure()
+	ai = assistant()
+	author = ctx.author.display_name
+	logging.info(author)
 	async with ctx.channel.typing():
-		r,a = await run_blocking(d.prompt,question)
+		message_in = " ".join(question)
+		a = await run_blocking(ai.interact,author,message_in)
 	await ctx.send(a)
 
 @client.event
 async def on_message(message):
 	if message.author.bot == False and client.user.mentioned_in(message):
-		from chat import davinci
-		# Configure chat feature
-		d = davinci()
-		d.configure()
+		# Bot was mentioned, so pull the singlton
+		ai = assistant()
+		author = message.author.display_name
+		# Hack to help resolve tagging into name
+		message_in = message.content.replace("<@&"+str(client.user.id)+">", client.user.name)
 		async with message.channel.typing():
-			r,a = await run_blocking(d.prompt, message.content.split())
+			a = await run_blocking(ai.interact,author,message_in)
 		await message.channel.send(a)
 	else:
 		await client.process_commands(message)
@@ -187,6 +191,9 @@ async def on_command_error(ctx, error):
 		await ctx.send('**Please pass in all requirements.**')
 	if isinstance(error, commands.MissingPermissions):
 		await ctx.send("**You dont have all the requirements or permissions for using this command :angry:**")
+
+
+
 
 # Run client
 client.run(os.getenv('TOKEN'))
